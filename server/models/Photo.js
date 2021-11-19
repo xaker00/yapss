@@ -1,14 +1,24 @@
 const mongoose = require("mongoose");
-const Profile = require("./Profile");
+const Profile = require("./User");
 
-const postSchema = new mongoose.Schema({
+const PhotoSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  profile: {
+  title: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+  description: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Profile",
+    ref: "User",
   },
   hashtag: {Array},
   url: {
@@ -22,21 +32,6 @@ const postSchema = new mongoose.Schema({
   },
 });
 
-postSchema.pre("save", function (next) {
-  let caption = this.caption.replace(/\s/g, "");
-  console.log(caption);
-  let hashTagIndex = caption.indexOf("#");
-  if (hashTagIndex === -1) {
-    this.hashtag = undefined;
-    return next();
-  }
-  let hashTagSplice = caption.slice(hashTagIndex);
-  //let res= hashTagSplice.replace(/#/, '').split('#');
+const Photo = mongoose.model("Photo", PhotoSchema);
 
-  this.hashtag = hashTagSplice.replace(/#/, "").split("#");
-  next();
-});
-
-const Post = mongoose.model("Post", postSchema);
-
-module.exports = Post;
+module.exports = Photo;

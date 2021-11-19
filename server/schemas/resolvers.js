@@ -6,10 +6,11 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("photos");
+        return User.findOne({ _id: context.user._id }).populate("Photo");
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+
   },
 
   Mutation: {
