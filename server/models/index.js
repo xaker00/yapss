@@ -1,8 +1,7 @@
-const { model } = require('mongoose');
 const User = require('./User');
-const photoSchema = require('./Photo');
+const Post = require("./Photo");
+const Profile = require("./Profile");
+const Hashtag = require("./Hashtag.js");
+const Comment = require("./Comment.js");
 
-const Photo = model('Book', photoSchema);
-
-
-module.exports = { User, Book: Photo };
+module.exports = { User, Post, Profile, Hashtag, Message };

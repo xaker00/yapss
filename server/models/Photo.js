@@ -1,11 +1,42 @@
-const { Schema } = require('mongoose');
+const mongoose = require("mongoose");
+const Profile = require("./Profile");
 
-const photoSchema = new Schema({
-  photoId: {
-    type: String,
-    required: true,
+const postSchema = new mongoose.Schema({
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
-  // add other fields here
+  profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Profile",
+  },
+  hashtag: {Array},
+  url: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+  comment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Comment",
+  },
 });
 
-module.exports = photoSchema;
+postSchema.pre("save", function (next) {
+  let caption = this.caption.replace(/\s/g, "");
+  console.log(caption);
+  let hashTagIndex = caption.indexOf("#");
+  if (hashTagIndex === -1) {
+    this.hashtag = undefined;
+    return next();
+  }
+  let hashTagSplice = caption.slice(hashTagIndex);
+  //let res= hashTagSplice.replace(/#/, '').split('#');
+
+  this.hashtag = hashTagSplice.replace(/#/, "").split("#");
+  next();
+});
+
+const Post = mongoose.model("Post", postSchema);
+
+module.exports = Post;
