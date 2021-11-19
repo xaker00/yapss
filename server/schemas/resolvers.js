@@ -6,9 +6,18 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("photos");
+        return User.findOne({ _id: context.user._id }).populate("Photo");
       }
       throw new AuthenticationError("You need to be logged in!");
+    },
+     photo: async (parent, { name }) => {
+      const params = {};
+      if (name) {
+        params.name = {
+          $regex: name
+        };
+      }
+      return await Photo.find(params).populate('Comment');
     },
   },
 
@@ -30,45 +39,41 @@ const resolvers = {
 
       return { token, user };
     },
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
+    addUser: async (parent, { username, email, password, avatar }) => {
+      const user = await User.create({ username, email, name, password });
       const token = signToken(user);
       return { token, user };
     },
-    
-    // TODO: finish this method
-    addPhoto: async (
-      parent,
-      { /* add photo properties */ },
-      context
-    ) => {
-      if (context.user) {
-        const photo = await Photo.create({ /* add photo properties */ });
+    // addPhoto: async (parent, { photo }, context) => {
+    //   console.log(context);
+    //   if (context.user) {
+    //     const photo = new Photo({ photo });
+    //     await User.findByIdAndUpdate(context.user._id, { $push: { Photo: photo } });
+    //     return photo;
+    //   }
+    //   throw new AuthenticationError('Not logged in');
+    // },
+    // addComment: async (parent,{ comment }, context) => {
+    //   console.log(context);
+    //   if (context.user) {
+    //     const comment = new Comment({ comment });
+    //     await comment.findByIdAndUpdate(context.user._id, { $push: { Comment: comment } });
+    //     return await comment.insert;
+    //   }
+    //   throw new AuthenticationError('Not logged in');
+    // },
+    // // updatePhoto: async (parent, { _id, like, comment }) => {
+    //   if (like) {
+    //     params.like = like;
+    //   }
 
-        const user = await User.findOneAndUpdate(
-          { username: context.user.username },
-          { $addToSet: { photos: photo } }
-        );
-
-        return user;
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    removePhoto: async (parent, { photoId }, context) => {
-      if (context.user) {
-        const photo = await Photo.findOneAndDelete({
-          photoId,
-        });
-
-        const user = await User.findOneAndUpdate(
-          { username: context.user.username },
-          { $pull: { photos: {photoId} } }
-        );
-
-        return user;
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
+    //   if (comment) {
+    //     params.comment = {
+    //       comment
+    //     };
+    //   }
+    //   return await Photo.findByIdAndUpdate(_id, { params }, { new: true });
+    // },
   },
 };
 

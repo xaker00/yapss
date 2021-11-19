@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
-
+const mongoose = require("mongoose");
 const photoSchema = require('./Photo');
 
 const userSchema = new Schema(
@@ -9,6 +9,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    name: {
+      type: String,
     },
     email: {
       type: String,
@@ -19,6 +22,11 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
+    },
+    avatar: {
+      type: Object,
+      default:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Favatar-default-user%2F92824&psig=AOvVaw0RhgKtP-m-oeq6yF_6EUxv&ust=1637376784016000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNiP0f61o_QCFQAAAAAdAAAAABAD",
     },
     // set photos to be an array of data that adheres to the photoSchema
     photos: [photoSchema],
