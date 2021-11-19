@@ -44,6 +44,36 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
+    addPhoto: async (parent, { photo }, context) => {
+      console.log(context);
+      if (context.user) {
+        const photo = new Photo({ photo });
+        await User.findByIdAndUpdate(context.user._id, { $push: { Photo: photo } });
+        return photo;
+      }
+      throw new AuthenticationError('Not logged in');
+    },
+    // addComment: async (parent,{ comment }, context) => {
+    //   console.log(context);
+    //   if (context.user) {
+    //     const comment = new Comment({ comment });
+    //     await comment.findByIdAndUpdate(context.user._id, { $push: { Comment: comment } });
+    //     return await comment.insert;
+    //   }
+    //   throw new AuthenticationError('Not logged in');
+    // },
+    // // updatePhoto: async (parent, { _id, like, comment }) => {
+    //   if (like) {
+    //     params.like = like;
+    //   }
+
+    //   if (comment) {
+    //     params.comment = {
+    //       comment
+    //     };
+    //   }
+    //   return await Photo.findByIdAndUpdate(_id, { params }, { new: true });
+    // },
   },
 };
 

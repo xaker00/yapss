@@ -7,6 +7,7 @@ const typeDefs = gql`
     name: String!
     email: String!
     avatar: String!
+    photo: [Photo]
   }
 
   type Photo {
@@ -24,6 +25,7 @@ const typeDefs = gql`
     _id: ID
     photo: Photo
     comment: String!
+    user: User
   }
 
   type Auth {
@@ -39,6 +41,8 @@ const typeDefs = gql`
   type Mutation {
     login(email: String, password: String): Auth
     addUser(username: String!, email: String!, password: String!): Auth
+    addPhoto(title: String!, description: String!, hashtag: [String!], likes: String!, url: String!): Auth
+     
   }
 `;
 
