@@ -13,6 +13,7 @@ import { Login } from "./pages/Login";
 import { Profile } from "./pages/Profile";
 import { SearchPhotos } from "./pages/SearchPhotos";
 import { Upload } from "./pages/Upload";
+import { SinglePhoto } from "./pages/SinglePhoto";
 
 import {Navbar} from "./components/Navbar"
 
@@ -48,6 +49,10 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/upload" component={Upload} />
+            {/* <Route exact path="/singlephoto" component={SinglePhoto} /> */}
+            <Route exact path="/singlephoto" >
+              <SinglePhoto/>
+            </Route>
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Switch>
         </>
