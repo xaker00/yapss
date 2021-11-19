@@ -14,7 +14,6 @@ const typeDefs = gql`
     _id: ID
     title: String!
     description: String!
-    user: User
     hashtag: [String!]
     likes: String!
     url: String!
@@ -23,7 +22,6 @@ const typeDefs = gql`
 
   type Comment{
     _id: ID
-    photo: Photo
     comment: String!
     user: User
   }
