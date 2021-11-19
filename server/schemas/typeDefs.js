@@ -4,13 +4,26 @@ const typeDefs = gql`
   type User {
     _id: ID
     username: String!
+    name: String!
     email: String!
-    photos: [Photo]
+    avatar: String!
   }
 
   type Photo {
-    photoId: String!
-    # TODO: add other properties
+    _id: ID
+    title: String!
+    description: String!
+    user: User
+    hashtag: [String!]
+    likes: String!
+    url: String!
+    comment: [Comment]
+  }
+
+  type Comment{
+    _id: ID
+    photo: Photo
+    comment: String!
   }
 
   type Auth {
@@ -20,15 +33,12 @@ const typeDefs = gql`
 
   type Query {
     me: User
+    photo: Photo
   }
 
   type Mutation {
     login(email: String, password: String): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-
-    # TODO: this needs more work
-    addPhoto(file: Upload!): User
-    removePhoto(photoId: String): User
   }
 `;
 

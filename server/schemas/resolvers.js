@@ -10,7 +10,15 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-
+     photo: async (parent, { name }) => {
+      const params = {};
+      if (name) {
+        params.name = {
+          $regex: name
+        };
+      }
+      return await Photo.find(params).populate('Comment');
+    },
   },
 
   Mutation: {
@@ -31,44 +39,10 @@ const resolvers = {
 
       return { token, user };
     },
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
+    addUser: async (parent, { username, email, password, avatar }) => {
+      const user = await User.create({ username, email, name, password });
       const token = signToken(user);
       return { token, user };
-    },
-    
-    // TODO: finish this method
-    addPhoto: async (
-      parent,
-      { /* add photo properties */ },
-      context
-    ) => {
-      if (context.user) {
-        const photo = await Photo.create({ /* add photo properties */ });
-
-        const user = await User.findOneAndUpdate(
-          { username: context.user.username },
-          { $addToSet: { photos: photo } }
-        );
-
-        return user;
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    removePhoto: async (parent, { photoId }, context) => {
-      if (context.user) {
-        const photo = await Photo.findOneAndDelete({
-          photoId,
-        });
-
-        const user = await User.findOneAndUpdate(
-          { username: context.user.username },
-          { $pull: { photos: {photoId} } }
-        );
-
-        return user;
-      }
-      throw new AuthenticationError("You need to be logged in!");
     },
   },
 };

@@ -10,6 +10,9 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    name: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
@@ -19,13 +22,6 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-    },
-     name: {
-    type: String,
-    },
-    birthday: {
-      type: Date,
-      select: false
     },
     avatar: {
       type: Object,

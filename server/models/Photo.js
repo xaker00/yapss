@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const Profile = require("./User");
 
 const PhotoSchema = new mongoose.Schema({
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
   title: {
       type: String,
       required: true,
@@ -20,17 +16,20 @@ const PhotoSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  hashtag: {Array},
+  hashtag: [{
+    tag : String,
+     }],
+  likes: { type: Number, default: 0 },
   url: {
       type: String,
       required: true,
       unique: true,
     },
-  comment: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Comment",
-  },
-});
+  // comment: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Comment",
+  // },
+}, { timestamps: true });
 
 const Photo = mongoose.model("Photo", PhotoSchema);
 
