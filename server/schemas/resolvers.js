@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User, Photo  } = require("../models");
+const { User, Photo, Comment  } = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
@@ -10,15 +10,22 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-     photo: async (parent, { name }) => {
-      const params = {};
-      if (name) {
-        params.name = {
-          $regex: name
-        };
-      }
-      return await Photo.find(params).populate('Comment');
+    photos: async () => {
+      console.log(Comment.findOne({}).limit(1));
+      return await Comment.find({});
+        // .populate("Comment")
+        // .limit(100)
+        // .sort({ _id: -1 });
     },
+    // photo: async (parent, { name }) => {
+    //   const params = {};
+    //   if (name) {
+    //     params.name = {
+    //       $regex: name,
+    //     };
+    //   }
+    //   return await Photo.find(params).populate("Comment");
+    // },
   },
 
   Mutation: {
