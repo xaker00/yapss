@@ -9,9 +9,14 @@ const CommentSchema = new Schema(
       minlength: 1,
       maxlength: 1024,
     },
+    photo: {
+      type: Schema.Types.ObjectId,
+      ref: "Photo",
+      // required: true,
+    },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: Schema.Types.ObjectId,
+      ref: "User",
       // required: true,
     },
   },

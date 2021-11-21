@@ -20,9 +20,14 @@ connectDB.once("open", async () => {
     const tempUsers = users[Math.floor(Math.random() * users.length)];
     tempUsers.comments.push(NewComment._id);
     await tempUsers.save();
-    
-    NewComment.user=tempUsers._id;
-    await NewComment.save(); 
+    // randomly add each photo to a comment
+    const tempPhoto = photos[Math.floor(Math.random() * photos.length)];
+    tempPhoto.comments.push(NewComment._id);
+    await tempPhoto.save();
+    // add user and photo reference to comment
+    NewComment.user = tempUsers._id;
+    NewComment.photo = tempPhoto._id;
+    await NewComment.save();
   }
 
     for (NewPhoto of photos) {
@@ -30,7 +35,7 @@ connectDB.once("open", async () => {
       const tempUsers = users[Math.floor(Math.random() * users.length)];
       tempUsers.photos.push(NewPhoto._id);
       await tempUsers.save();
-      
+      // add user reference to photo
       NewPhoto.user = tempUsers._id;
       await NewPhoto.save();
     }

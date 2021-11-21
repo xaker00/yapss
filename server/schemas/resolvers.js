@@ -6,26 +6,52 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("Photo");
+        return User.findOne({ _id: context.user._id })
+        .populate("comments")
+        .populate("user")
+        .populate({
+          path: "comments",
+          populate: "user",
+        })
       }
       throw new AuthenticationError("You need to be logged in!");
     },
     photos: async () => {
-      console.log(Comment.findOne({}).limit(1));
-      return await Comment.find({});
-        // .populate("Comment")
-        // .limit(100)
-        // .sort({ _id: -1 });
+      return await Photo.find({})
+        .populate("comments")
+        .populate("user")
+        .populate({
+          path: "comments",
+          populate: "user",
+        })
+        .limit(100)
+        .sort({ _id: -1 });
     },
-    // photo: async (parent, { name }) => {
-    //   const params = {};
-    //   if (name) {
-    //     params.name = {
-    //       $regex: name,
-    //     };
-    //   }
-    //   return await Photo.find(params).populate("Comment");
-    // },
+    comments: async () => {
+      return await Comment.find({}).populate("user").populate("photo");
+    },
+    users: async () => {
+      return await User.find({})
+        .populate("photos")
+        .populate({
+          path: "photos",
+          populate: "comment",
+        })
+        .populate("comments")
+        .populate({
+          path: "comments",
+          populate: "user",
+        });
+    },
+    photo: async (parent, { photoId }) => {
+      return await Photo.findOne({ _id: photoId })
+        .populate("comments")
+        .populate("user")
+        .populate({
+          path: "comments",
+          populate: "user",
+        });
+    },
   },
 
   Mutation: {

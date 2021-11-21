@@ -24,14 +24,14 @@ const PhotoSchema = new Schema(
       required: true,
       unique: true,
     },
-    comment: [
+    comments: [
       {
         type: Schema.Types.ObjectId,
         ref: "Comment",
       },
     ],
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       // required: true,
     },

@@ -18,14 +18,15 @@ const typeDefs = gql`
     hashtag: [String]
     likes: Int
     url: String
-    comment: [Comment]
-    user: [User]
+    comments: [Comment]
+    user: User
   }
 
   type Comment {
     _id: ID
     comment: String
-    user: [User]
+    photo: Photo
+    user: User
   }
 
   type Auth {
@@ -34,21 +35,16 @@ const typeDefs = gql`
   }
 
   type Query {
-    me: User
-    photos: Photo
-    photo: Photo
+    me: [User]
+    users: [User]
+    photos: [Photo]
+    comments: [Comment]
+    photo(photoId: ID!): Photo
   }
 
   type Mutation {
     login(email: String, password: String): Auth
     addUser(username: String, email: String, password: String): Auth
-    addPhoto(
-      title: String
-      description: String
-      hashtag: [String]
-      likes: String
-      url: String
-    ): Auth
   }
 `;
 
