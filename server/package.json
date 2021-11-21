@@ -12,10 +12,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server-express": "2.12.0",
+    "apollo-server": "^3.5.0",
+    "apollo-server-express": "^3.5.0",
+    "backblaze-b2": "^1.7.0",
     "bcrypt": "^4.0.1",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "graphql": "15.0.0",
+    "graphql": "^15.3.0",
+    "graphql-upload": "^12.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.10"
   },
