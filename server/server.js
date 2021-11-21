@@ -1,9 +1,10 @@
 const { ApolloServer } = require("apollo-server-express");
 const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
+const { graphqlUploadExpress } = require("graphql-upload");
 const express = require("express");
 const http = require("http");
 const path = require("path");
-const { once, EventEmitter } = require('events');
+const { once, EventEmitter } = require("events");
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
@@ -20,6 +21,10 @@ async function startApolloServer() {
     context: authMiddleware,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
+
+  // This middleware should be added before calling `applyMiddleware`.
+  app.use(graphqlUploadExpress());
+
   await server.start();
   server.applyMiddleware({ app });
 
@@ -37,7 +42,7 @@ async function startApolloServer() {
   });
 
   // wait until database emits 'open' event
-  await once(db, 'open');
+  await once(db, "open");
 
   await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
   console.log(
