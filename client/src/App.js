@@ -15,6 +15,7 @@ import { SearchPhotos } from "./pages/SearchPhotos";
 import { Upload } from "./pages/Upload";
 import { SinglePhoto } from "./pages/SinglePhoto";
 
+
 import {Navbar} from "./components/Navbar"
 
 const httpLink = createHttpLink({

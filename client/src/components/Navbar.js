@@ -7,6 +7,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+// import { BrowserRouter } from "react-router-dom";
+import SignIn from "./SignIn";
+
+
 
 export const Navbar = (props) => {
   return (
@@ -25,7 +29,7 @@ export const Navbar = (props) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             YAPSS
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit">login</Button>
         </Toolbar>
       </AppBar>
     </Box>
