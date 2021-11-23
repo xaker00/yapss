@@ -45,6 +45,13 @@ const typeDefs = gql`
   type Mutation {
     login(email: String, password: String): Auth
     addUser(username: String, email: String, password: String): Auth
+    addPhoto(title: String!, url: String): Photo
+    deletePhoto(photoId: ID!): Photo
+    addComment(comment: String, photoId: ID!): Comment
+    deleteComment(photoId: ID!, , commentId: ID!): Comment
+    updateLike(photoId: ID!, counter: Int!): Photo
+    addHashtag(photoId: ID!, hashtagText: String!): Photo
+    removeHashtag(photoId: ID!, hashtagText: String!): Photo
   }
 `;
 

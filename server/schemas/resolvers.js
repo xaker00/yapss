@@ -7,12 +7,12 @@ const resolvers = {
     me: async (parent, args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id })
-        .populate("comments")
-        .populate("user")
-        .populate({
-          path: "comments",
-          populate: "user",
-        })
+          .populate("comments")
+          .populate("user")
+          .populate({
+            path: "comments",
+            populate: "user",
+          });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -77,36 +77,109 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    // addPhoto: async (parent, { photo }, context) => {
-    //   console.log(context);
-    //   if (context.user) {
-    //     const photo = new Photo({ photo });
-    //     await User.findByIdAndUpdate(context.user._id, { $push: { Photo: photo } });
-    //     return photo;
-    //   }
-    //   throw new AuthenticationError('Not logged in');
-    // },
-    // addComment: async (parent,{ comment }, context) => {
-    //   console.log(context);
-    //   if (context.user) {
-    //     const comment = new Comment({ comment });
-    //     await comment.findByIdAndUpdate(context.user._id, { $push: { Comment: comment } });
-    //     return await comment.insert;
-    //   }
-    //   throw new AuthenticationError('Not logged in');
-    // },
-    // // updatePhoto: async (parent, { _id, like, comment }) => {
-    //   if (like) {
-    //     params.like = like;
-    //   }
+    addPhoto: async (parent, { title, url }, context) => {
+      if (context.user) {
+        const photo = await Photo.create({
+          title,
+          url,
+          user: context.user._id,
+        });
 
-    //   if (comment) {
-    //     params.comment = {
-    //       comment
-    //     };
-    //   }
-    //   return await Photo.findByIdAndUpdate(_id, { params }, { new: true });
-    // },
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { photos: photo._id } }
+        );
+
+        return photo;
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    deletePhoto: async (parent, { photoId }, context) => {
+      if (context.user) {
+        const photo = await Photo.findOneAndDelete({
+          _id: photoId,
+          user: context.user._id,
+        });
+
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { photos: photoId } }
+        );
+
+        return photo;
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    addComment: async (parent, { comment, photoId }, context) => {
+      if (context.user) {
+        const comment = await Comment.create({
+          comment,
+          photoId,
+          user: context.user._id,
+        });
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { comment: comment._id } }
+        );
+        await photo.findOneAndUpdate(
+          { _id: photoId },
+          { $addToSet: { comment: comment._id } }
+        );
+        return comment;
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    deleteComment: async (parent, { photoId, commentId }, context) => {
+      if (context.user) {
+        const comment = await Comment.findOneAndDelete({
+          _id: commentId,
+          user: context.user._id,
+        });
+
+        await User.findOneAndUpdate(
+          { user: context.user._id },
+          { $pull: { comments: commentId } }
+        );
+
+        await Photo.findOneAndUpdate(
+          { _id: photoId },
+          { $pull: { comments: photoId } }
+        );
+
+        return photo;
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    updateLike: async (parent, { photoId, counter }, context) => {
+      if (context.user) {
+        const photoData = await Photo.findOneAndUpdate(
+          { _id: photoId },
+          { $set: { like: photo.like + counter } }
+        );
+        return photoData;
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    addHashtag: async (parent, { photoId, hashtagText }, context) => {
+      if (context.user) {
+        const photoData = await Photo.findOneAndUpdate(
+          { _id: photoId },
+          { $addToSet: { hashtag: hashtagText } }
+        );
+        return photoData;
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    removeHashtag: async (parent, { photoId, hashtagText }, context) => {
+      if (context.user) {
+        const photoData = await Photo.findOneAndUpdate(
+          { _id: photoId },
+          { $pull: { hashtag: hashtagText } }
+        );
+        return photoData;
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
   },
 };
 
