@@ -112,7 +112,7 @@ const resolvers = {
         const stream = createReadStream();
 
         // upload file to cloud storage
-        const url = await uploadFile(filename, stream);
+        const url = await uploadFile(filename, stream, mimetype);
 
         const photo = await Photo.create({
           title,

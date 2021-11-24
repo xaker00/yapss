@@ -1,4 +1,5 @@
 const B2 = require("backblaze-b2");
+const { v4: uuidv4 } = require('uuid');
 
 const b2 = new B2({
   applicationKeyId: process.env.B2_ID,
@@ -9,7 +10,7 @@ const b2 = new B2({
  * @param {*} data data stream
  * @returns publicly accessible URL
  */
-const uploadFile = async (fileName, dataStream) => {
+const uploadFile = async (fileName, dataStream, mime) => {
   const auth = await b2.authorize();
   const bucket = await b2.getBucket({ bucketName: process.env.BUCKET_NAME });
   const dataBuffer = await streamToBuffer(dataStream);
@@ -19,8 +20,9 @@ const uploadFile = async (fileName, dataStream) => {
   const result = await b2.uploadFile({
     uploadUrl,
     uploadAuthToken: authorizationToken,
-    fileName,
+    fileName: uuidv4(),
     data: dataBuffer,
+    mime
   });
 
   console.log(result);
