@@ -1,16 +1,17 @@
 import React from "react";
 
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-// import { BrowserRouter } from "react-router-dom";
-import SignIn from "./SignIn";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 
+import MenuIcon from "@material-ui/icons/Menu";
 
+import Auth from "../utils/auth";
 
 export const Navbar = (props) => {
   return (
@@ -26,10 +27,23 @@ export const Navbar = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+            onClick={() => window.location.assign("/")}
+          >
             YAPSS
           </Typography>
-          <Button color="inherit">login</Button>
+          {Auth.loggedIn() ? (
+            <Button color="inherit" onClick={Auth.logout}>
+              logout
+            </Button>
+          ) : (
+            <Button color="inherit" href="/login">
+              login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
