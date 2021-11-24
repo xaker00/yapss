@@ -5,6 +5,7 @@ import {
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
+  from,
 } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
@@ -42,8 +43,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   // TODO: do we still need the httpLink?
-  // link: from([authLink, uploadLink]),
-  link: uploadLink,
+  link: from([authLink, uploadLink]),
   cache: new InMemoryCache(),
 });
 
