@@ -1,26 +1,13 @@
 // To Do
 
-// For hashtags and comments:
-// Determine limit for both
-// Determine which hashtags/comments to display when limit is reached
-
-// Giving data to componenets (props):
-// prop names needed:
-// avatar name - needs to be two words for color choosing function
-// -or- modify StringAvatar() funciton to accept single avatar name
-// photo name - ID?
-// hashtag name
-// average rating name
-// comment name
-// avatar name for each comment
-
-// Find method to use props when there are multiple props to display
-// Need for hashtags and comments
-
-// Find way to accept prop (rating) and send to database
-
-// Questions:
-// Should we allow user to choose avatar photo?
+// 1. Create add an add comment component
+// 2. Create addComment query
+// 2. Seed database to test queries
+// 3. If we are moving to Likes, implement
+// 4. Send Like/Rating/Comment back to databse
+// 5. Determine UI limit for comments and hashtags
+// 6. Determine wheter to display most recent of first comments and hashtags
+// 7. Find method to access comments and hashtags from arrays, .map?
 
 
 import React from "react";
