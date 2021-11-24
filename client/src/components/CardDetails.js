@@ -1,6 +1,8 @@
 import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CardHeader from '@mui/material/CardHeader';
+import { GET_PHOTO } from '../utils/queries';
+import { useQuery } from '@apollo/client';
 
 // Convert Avatar name to color
 function stringToColor(string) {
@@ -23,23 +25,36 @@ function stringToColor(string) {
   return color;
 }
 
+// Edited for single word avatar name
+
 function stringAvatar(name) {
   return {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    children: name,
   };
 }
 
 
 export const CardDetails = (props) => {
+  
+  // Sample return statement using mock-up query and data
+
+  // const photo = useQuery( GET_PHOTO );
+  // return (
+  //   <CardHeader
+  //     avatar={
+  //       <Avatar {...stringAvatar({photo.user.username})} aria-label="avatar">
+  //         {photo.user.username}
+  //       </Avatar>
+  //     }
+  //     title="{photo.title}"
+  //     subheader="{photo.timestamp}"
+  //   />)
+
+  
   return (
-    // Header containing avatar of uploader, title, and subheader
-    // can pass in img as img src or srcSet
-    // or as a letter as seen below
-    // or have mui generate the color and two letter initials with the name of the person
-    // like <Avatar {...stringAvatar('First Last')} />
     <CardHeader
       avatar={
         <Avatar {...stringAvatar('Misty Island')} aria-label="avatar">
