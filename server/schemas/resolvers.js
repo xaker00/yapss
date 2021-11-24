@@ -1,8 +1,23 @@
-const { AuthenticationError } = require("apollo-server-express");
-const { User, Photo  } = require("../models");
+const {
+  AuthenticationError,
+  ValidationError,
+} = require("apollo-server-express");
+const { GraphQLUpload, graphqlUploadExpress } = require("graphql-upload");
+const util = require("util");
+const path = require("path");
+
+const { User, Photo } = require("../models");
 const { signToken } = require("../utils/auth");
 
+const { uploadFile } = require("../utils/storage");
+
+const imageTypes = ["image/gif", "image/jpeg", "image/png"];
+
 const resolvers = {
+  // This maps the `Upload` scalar to the implementation provided
+  // by the `graphql-upload` package.
+  Upload: GraphQLUpload,
+
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
@@ -10,7 +25,6 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-
   },
 
   Mutation: {
@@ -36,22 +50,43 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    
-    // TODO: finish this method
+
     addPhoto: async (
       parent,
-      { /* add photo properties */ },
+      { file, title, description, hashtags },
       context
     ) => {
-      if (context.user) {
-        const photo = await Photo.create({ /* add photo properties */ });
+      console.log("uploading photo📸", "folder", __dirname);
 
-        const user = await User.findOneAndUpdate(
-          { username: context.user.username },
-          { $addToSet: { photos: photo } }
+      if (context.user) {
+        const { createReadStream, filename, mimetype, encoding } = await file;
+
+        // make sure the file is an image, we don't want people uploading viruses or pirated content
+        if (!imageTypes.includes(mimetype)) {
+          throw new ValidationError("Invalid image format");
+        }
+
+        // Invoking the `createReadStream` will return a Readable Stream.
+        // See https://nodejs.org/api/stream.html#stream_readable_streams
+        const stream = createReadStream();
+
+        // upload file to cloud storage
+        const url = await uploadFile(filename, stream);
+
+        const photo = await Photo.create({
+          title,
+          url,
+          description,
+          hashtags,
+          user: context.user._id,
+        });
+
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { photos: photo._id } }
         );
 
-        return user;
+        return { filename, mimetype, encoding };
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -63,7 +98,7 @@ const resolvers = {
 
         const user = await User.findOneAndUpdate(
           { username: context.user.username },
-          { $pull: { photos: {photoId} } }
+          { $pull: { photos: { photoId } } }
         );
 
         return user;
