@@ -16,6 +16,7 @@ const typeDefs = gql`
     email: String!
     avatar: String
     photos: [Photo]
+    comments: [Comment]
   }
 
   type Photo {
@@ -25,7 +26,7 @@ const typeDefs = gql`
     hashtags: [String]!
     likes: Int
     url: String!
-    comment: [Comment]
+    comments: [Comment]
     user: User
   }
 
@@ -42,15 +43,24 @@ const typeDefs = gql`
   }
 
   type Query {
-    me: User
+    me: [User]
+    users: [User]
+    photos: [Photo]
+    comments: [Comment]
+    photo(photoId: ID!): Photo
   }
 
   type Mutation {
     login(email: String, password: String): Auth
-    addUser(username: String!, email: String!, password: String!): Auth
-
+    addUser(username: String, email: String, password: String): Auth
     addPhoto(file: Upload!, title: String!, description: String!, hashtags: [String]!): File
-    removePhoto(photoId: ID): User
+    deletePhoto(photoId: ID!): Photo
+    addComment(comment: String, photoId: ID!): Comment
+    deleteComment(photoId: ID!, , commentId: ID!): Comment
+    updateLike(photoId: ID!, counter: Int!): Photo
+    addHashtag(photoId: ID!, hashtagText: String!): Photo
+    removeHashtag(photoId: ID!, hashtagText: String!): Photo
+
   }
 `;
 

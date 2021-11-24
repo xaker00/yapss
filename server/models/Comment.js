@@ -1,25 +1,28 @@
+const { Schema, model } = require("mongoose");
 const mongoose = require("mongoose");
 
-const CommentSchema = new mongoose.Schema({
-  Photo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Profile",
+const CommentSchema = new Schema(
+  {
+    comment: {
+      type: String,
+      required: [true, "Comment should not be empty!"],
+      minlength: 1,
+      maxlength: 1024,
+    },
+    photo: {
+      type: Schema.Types.ObjectId,
+      ref: "Photo",
+      // required: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      // required: true,
+    },
   },
-  Comment: {
-    type: String,
-    required: [true, "Comment should not be empty"],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true }
+);
 
-CommentSchema.pre(/^find/, function (next) {
-  this.find().populate("group");
-  next();
-});
-
-const Comment = new mongoose.model("Comment", CommentSchema);
+const Comment = model('Comment', CommentSchema);
 
 module.exports = Comment;

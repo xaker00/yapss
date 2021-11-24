@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
-
-const photoSchema = require('./Photo');
+const mongoose = require("mongoose");
+// const photoSchema = require('./Photo');
 
 const userSchema = new Schema(
   {
@@ -10,22 +10,18 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    name: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
       unique: true,
-      match: [/.+@.+\..+/, 'Must use a valid email address'],
+      match: [/.+@.+\..+/, "Must use a valid email address"],
     },
     password: {
       type: String,
       required: true,
-    },
-     name: {
-    type: String,
-    },
-    birthday: {
-      type: Date,
-      select: false
     },
     avatar: {
       type: Object,
@@ -33,7 +29,18 @@ const userSchema = new Schema(
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Favatar-default-user%2F92824&psig=AOvVaw0RhgKtP-m-oeq6yF_6EUxv&ust=1637376784016000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNiP0f61o_QCFQAAAAAdAAAAABAD",
     },
     // set photos to be an array of data that adheres to the photoSchema
-    // photos: [photoSchema],
+    photos: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Photo",
+      },
+    ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   // set this to use virtual below
   {

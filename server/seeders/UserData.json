@@ -1,0 +1,23 @@
+[
+  {
+    "username": "sal@hotmail.com",
+    "name": "Sal",
+    "email": "sal@hotmail.com",
+    "password": "password12345",
+    "avatar": "https://www.clipartmax.com/png/middle/405-4050774_avatar-icon-flat-icon-shop-download-free-icons-for-avatar-icon-flat.png"
+  },
+  {
+    "username": "lernantino@gmail.com",
+    "name": "Victor",
+    "email": "lernantino@gmail.com",
+    "password": "password12345",
+    "avatar": "https://www.clipartmax.com/png/middle/405-4050774_avatar-icon-flat-icon-shop-download-free-icons-for-avatar-icon-flat.png"
+  },
+  {
+    "username": "amiko2k20@aol.com",
+    "name": "Alex",
+    "email": "amiko2k20@aol.com",
+    "password": "password12345",
+    "avatar": "https://e7.pngegg.com/pngimages/674/524/png-clipart-professional-computer-icons-avatar-job-avatar-heroes-computer-thumbnail.png"
+  }
+]
