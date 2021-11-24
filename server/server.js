@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { ApolloServer } = require("apollo-server-express");
 const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
 const { graphqlUploadExpress } = require("graphql-upload");
