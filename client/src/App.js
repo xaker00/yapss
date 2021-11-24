@@ -5,7 +5,9 @@ import {
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
+  from
 } from "@apollo/client";
+import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from "@apollo/client/link/context";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -20,6 +22,10 @@ const httpLink = createHttpLink({
   uri: "/graphql",
 });
 
+const uploadLink = createUploadLink({
+  uri: "/graphql",
+})
+
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   const token = localStorage.getItem("id_token");
@@ -33,7 +39,9 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  // TODO: do we still need the httpLink?
+  // link: from([authLink, uploadLink]),
+  link: uploadLink,
   cache: new InMemoryCache(),
 });
 
