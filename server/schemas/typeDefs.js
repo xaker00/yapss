@@ -52,7 +52,7 @@ const typeDefs = gql`
 
   type Mutation {
     login(email: String, password: String): Auth
-    addUser(username: String, email: String, password: String): Auth
+    addUser(username: String, email: String, password: String, name: String): Auth
     addPhoto(file: Upload!, title: String!, description: String!, hashtags: [String]!): File
     deletePhoto(photoId: ID!): Photo
     addComment(comment: String, photoId: ID!): Comment
@@ -60,7 +60,6 @@ const typeDefs = gql`
     updateLike(photoId: ID!, counter: Int!): Photo
     addHashtag(photoId: ID!, hashtagText: String!): Photo
     removeHashtag(photoId: ID!, hashtagText: String!): Photo
-
   }
 `;
 

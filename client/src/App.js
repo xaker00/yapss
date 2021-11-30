@@ -12,7 +12,7 @@ import { setContext } from "@apollo/client/link/context";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
-import { SignUp } from "./pages/SignUp";
+import { createUser } from "./pages/createUser";
 import { Profile } from "./pages/Profile";
 import { SearchPhotos } from "./pages/SearchPhotos";
 import { Upload } from "./pages/Upload";
@@ -58,7 +58,7 @@ function App() {
               <SearchPhotos />
             </Route>
             <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={SignUp} />
+            <Route exact path="/createUser" component={createUser} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/upload" component={Upload} />
             {/* <Route exact path="/singlephoto" component={SinglePhoto} /> */}

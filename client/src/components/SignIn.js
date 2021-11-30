@@ -17,10 +17,6 @@ import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 
-
-
-
-
 export default function SignIn() {
   const [login, { error }] = useMutation(LOGIN);
 
@@ -100,7 +96,7 @@ export default function SignIn() {
             Sign In
           </Button>
         </Box>
-        <Link href="/register" variant="body2">
+        <Link href="/createUser" variant="body2">
           Don't have an account? Sign Up
         </Link>
       </Box>

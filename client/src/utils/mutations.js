@@ -26,3 +26,24 @@ export const ADD_PHOTO = gql`
   }
 }
 `;
+
+export const ADD_USER = gql`
+  mutation addUser(
+    $username: String!
+    $email: String!
+    $password: String!
+    $name: String!
+  ) {
+    addUser(
+      username: $username
+      email: $email
+      password: $password
+      name: $name
+    ) {
+      token
+      user {
+        _id
+      }
+    }
+  }
+`;
