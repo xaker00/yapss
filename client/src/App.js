@@ -10,7 +10,7 @@ import {
 import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, useParams } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { createUser } from "./pages/createUser";
 import { Profile } from "./pages/Profile";
@@ -62,7 +62,7 @@ function App() {
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/upload" component={Upload} />
             {/* <Route exact path="/singlephoto" component={SinglePhoto} /> */}
-            <Route exact path="/singlephoto">
+            <Route path="/singlephoto/:id">
               <SinglePhoto />
             </Route>
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />

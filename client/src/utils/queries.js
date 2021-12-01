@@ -2,16 +2,21 @@ import { gql } from '@apollo/client';
 
 export const GET_PHOTO = gql`
   # Needs testing, does photoId need to be changed to _id?
-  query photo($photoId: String) {
-    photo (_id: $photoId) {
+  query photo($photoId: String){
+    photo(photoId: $photoId) {
       _id
       title
       description
-      hashtag
       likes
       url
-      comments
-      user
+      comments {
+        comment
+      }
+      user {
+        name
+        username
+        email
+      }
     }
   }
 `
