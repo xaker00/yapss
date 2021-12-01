@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Paper, TextField, Box, Button } from "@mui/material";
+import { Paper, TextField, Box, Button, Alert } from "@mui/material";
 
 import { ADD_PHOTO } from "../utils/mutations";
 
@@ -20,6 +20,22 @@ export const Upload = (props) => {
     hashtags: [],
     file: {},
   });
+
+  const [feedback, setFeedback] = useState();
+
+  const [uploadEnabled, setUploadEnabled] = useState(false);
+
+  useEffect(() => {
+    if (
+      formData.title.length > 0 &&
+      formData.description.length > 0 &&
+      formData.file?.name?.length > 0
+    ) {
+      if (!uploadEnabled) setUploadEnabled(true);
+    } else {
+      if (uploadEnabled) setUploadEnabled(false);
+    }
+  }, [formData]);
 
   // expose graphql as a function
   const [savePhoto, { error }] = useMutation(ADD_PHOTO);
@@ -46,14 +62,21 @@ export const Upload = (props) => {
     console.log("response", response);
 
     if (error) {
-      throw new Error("something went wrong!");
+      console.log(error);
+      setFeedback({ severity: "error", message: "Something went wrong" });
     }
+
+    // send user to their photo
+    window.location.assign('/singlephoto/' + response.data.addPhoto._id);
   };
 
   return (
     <Paper sx={{ marginTop: 2 }}>
       <div style={{ width: "100%" }}>
         <Box sx={{ display: "grid", gridTemplateRows: "repeat(3, 1fr)" }}>
+          {feedback && (
+            <Alert severity={feedback.severity}>{feedback.message}</Alert>
+          )}
           <TextField
             sx={{ m: 2 }}
             id="title"
@@ -76,7 +99,7 @@ export const Upload = (props) => {
             <ReactTagInput
               tags={formData.hashtags}
               onChange={(newTags) => onTagChangeHandler(newTags)}
-              placeholder={'[Tags] Type and press enter'}
+              placeholder={"[Tags] Type and press enter"}
             />
           </Box>
         </Box>
@@ -85,6 +108,7 @@ export const Upload = (props) => {
         <input
           type="file"
           name="file"
+          accept="image/*"
           onChange={({
             target: {
               validity,
@@ -94,7 +118,12 @@ export const Upload = (props) => {
         />
       </Box>
       <Box sx={{ m: 2 }}>
-        <Button sx={{ m: 2 }} variant="contained" onClick={submitForm}>
+        <Button
+          sx={{ m: 2 }}
+          variant="contained"
+          onClick={submitForm}
+          disabled={!uploadEnabled}
+        >
           Upload
         </Button>
       </Box>

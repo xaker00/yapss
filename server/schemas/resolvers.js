@@ -132,7 +132,7 @@ const resolvers = {
           { $addToSet: { photos: photo._id } }
         );
 
-        return { filename, mimetype, encoding };
+        return photo;//{ filename, mimetype, encoding };
       }
       throw new AuthenticationError("You need to be logged in!");
     },
