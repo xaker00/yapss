@@ -1,7 +1,7 @@
 // To Do
 
-// 1. Create add an add comment component
-// 2. Create addComment query
+// 1. Create add an add comment component - done
+// 2. Create addComment query - pseudo code done
 // 2. Seed database to test queries
 // 3. If we are moving to Likes, implement
 // 4. Send Like/Rating/Comment back to databse

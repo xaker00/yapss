@@ -14,4 +14,16 @@ export const GET_PHOTO = gql`
       user
     }
   }
+`
+
+export const GET_COMMENTS = gql`
+ # psuedo code here, database might need to be completed
+  query comments($commentId: String) {
+    comments (_id: $commentId) {
+      _id
+      comment
+      photo
+      user
+    }
+  }
 `;
