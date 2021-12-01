@@ -1,5 +1,7 @@
 // To Do
 
+// From Ilya: hashtag component in his branch for singlePhoto
+
 // 1. Create add an add comment component - done
 // 2. Create addComment query - pseudo code done
 // 2. Seed database to test queries - 1st
