@@ -54,3 +54,27 @@ query me {
   }
 }
 `;
+export const GET_ALL_PHOTOS = gql`
+  {
+    photos{
+    _id
+    title
+    description
+    likes
+    url
+      comments {
+        comment
+          user {
+            name
+            username
+            email
+          }
+      }
+      user {
+        name
+        username
+        email
+      }
+    }
+  }
+`;
