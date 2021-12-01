@@ -6,18 +6,12 @@ const PhotoSchema = new Schema(
     title: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
       required: true,
-      unique: true,
     },
-    hashtags: [
-      {
-        tag: String,
-      },
-    ],
+    hashtags: [String],
     likes: { type: Number, default: 0 },
     url: {
       type: String,

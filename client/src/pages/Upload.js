@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Paper, TextField, Box, Button } from "@mui/material";
+import { Paper, TextField, Box, Button, Alert } from "@mui/material";
 
 import { ADD_PHOTO } from "../utils/mutations";
 
-import { Hashtags } from "./../components/Hashtags";
+import ReactTagInput from "@pathofdev/react-tag-input";
+
 import "./upload.css";
+import "@pathofdev/react-tag-input/build/index.css";
 
 // docs
 // https://www.apollographql.com/blog/graphql/file-uploads/with-react-hooks-typescript-amazon-s3-tutorial/
@@ -19,21 +21,34 @@ export const Upload = (props) => {
     file: {},
   });
 
+  const [feedback, setFeedback] = useState();
+
+  const [uploadEnabled, setUploadEnabled] = useState(false);
+
+  useEffect(() => {
+    if (
+      formData.title.length > 0 &&
+      formData.description.length > 0 &&
+      formData.file?.name?.length > 0
+    ) {
+      if (!uploadEnabled) setUploadEnabled(true);
+    } else {
+      if (uploadEnabled) setUploadEnabled(false);
+    }
+  }, [formData]);
+
   // expose graphql as a function
   const [savePhoto, { error }] = useMutation(ADD_PHOTO);
 
-  // Handle file upload changes
-  const onFileChangeHandlerOld = (event) => {
-    const file = event.target.files[0].file;
-    console.log(event.target);
-    setFormData({ ...formData, file });
+  const onTagChangeHandler = (newTags) => {
+    setFormData({ ...formData, hashtags: [...newTags] });
   };
 
-    // Handle file upload changes
-    const onFileChangeHandler = (file) => {
-      console.log(file);
-      setFormData({ ...formData, file });
-    };
+  // Handle file upload changes
+  const onFileChangeHandler = (file) => {
+    console.log(file);
+    setFormData({ ...formData, file });
+  };
 
   // handle text input changes
   const onInputChangeHandler = (event) => {
@@ -47,14 +62,21 @@ export const Upload = (props) => {
     console.log("response", response);
 
     if (error) {
-      throw new Error("something went wrong!");
+      console.log(error);
+      setFeedback({ severity: "error", message: "Something went wrong" });
     }
+
+    // send user to their photo
+    window.location.assign('/singlephoto/' + response.data.addPhoto._id);
   };
 
   return (
     <Paper sx={{ marginTop: 2 }}>
       <div style={{ width: "100%" }}>
         <Box sx={{ display: "grid", gridTemplateRows: "repeat(3, 1fr)" }}>
+          {feedback && (
+            <Alert severity={feedback.severity}>{feedback.message}</Alert>
+          )}
           <TextField
             sx={{ m: 2 }}
             id="title"
@@ -74,7 +96,11 @@ export const Upload = (props) => {
             value={formData.description}
           />
           <Box sx={{ m: 2 }}>
-            <Hashtags />
+            <ReactTagInput
+              tags={formData.hashtags}
+              onChange={(newTags) => onTagChangeHandler(newTags)}
+              placeholder={"[Tags] Type and press enter"}
+            />
           </Box>
         </Box>
       </div>
@@ -82,6 +108,7 @@ export const Upload = (props) => {
         <input
           type="file"
           name="file"
+          accept="image/*"
           onChange={({
             target: {
               validity,
@@ -91,7 +118,12 @@ export const Upload = (props) => {
         />
       </Box>
       <Box sx={{ m: 2 }}>
-        <Button sx={{ m: 2 }} variant="contained" onClick={submitForm}>
+        <Button
+          sx={{ m: 2 }}
+          variant="contained"
+          onClick={submitForm}
+          disabled={!uploadEnabled}
+        >
           Upload
         </Button>
       </Box>
