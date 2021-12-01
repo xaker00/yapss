@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_PHOTOS } from "../utils/queries";
 import Auth from "../utils/auth";
 import {
   TextField,
-  CssBaseline,
+  // CssBaseline, // do not use this, it breaks the navbar menu
   Container,
   Box,
   Button,
   CardContent,
+  ImageListItemBar,
+  ImageList,
+  ImageListItem,
+  IconButton,
+  ListSubheader,
 } from "@mui/material";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import IconButton from "@material-ui/core/IconButton";
+
 import InfoIcon from "@material-ui/icons/Info";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -39,31 +40,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SearchPhotos = () => {
-      const classes = useStyles();
+  const classes = useStyles();
   // create state for holding our search field data
-    const [searchInput, setSearchInput] = useState("");
-    const { loading, data } = useQuery(GET_ALL_PHOTOS);
-    // create state for holding returned photo data
-    const [SearchPhotos, setSearchPhotos] = useState(loading ? null : data);
-    
-  // create method to search for photos and set state on form submit
-    const handleFormSubmit = async (event) => {
-        console.log(searchInput);
-        // console.log(SearchPhotos.find((photo) => (photo.title = searchInput)));
-        // setSearchPhotos(SearchPhotos.find((photo) => (photo.title = searchInput)));
-    };
+  const [searchInput, setSearchInput] = useState("");
+  const { loading, data } = useQuery(GET_ALL_PHOTOS);
+  // create state for holding returned photo data
+  const [SearchPhotos, setSearchPhotos] = useState();
 
-    if (loading) {
-        return <h1>Loading...</h1>;
-    }
-    else if (!data) {
-        return <h1>No Data...</h1>;
-    }
-    else 
+  useEffect(() => {
+    setSearchPhotos(data);
+  }, [data]);
+
+  // create method to search for photos and set state on form submit
+  const handleFormSubmit = async (event) => {
+    console.log(searchInput);
+    // console.log(SearchPhotos.find((photo) => (photo.title = searchInput)));
+    // setSearchPhotos(SearchPhotos.find((photo) => (photo.title = searchInput)));
+  };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  } else if (!data) {
+    return <h1>No Data...</h1>;
+  } else
     return (
-      <>
+      <div className={classes.root}>
         <Container>
-          <CssBaseline />
+          {/* <CssBaseline /> */}
           {/* <h1>Search for Photo!</h1>
           <Box onSubmit={() => handleFormSubmit}>
             <TextField
@@ -81,23 +84,24 @@ const SearchPhotos = () => {
         </Container>
         <Container>
           <h2>
-            {SearchPhotos.photos.length
+            {SearchPhotos?.photos?.length
               ? `Viewing ${SearchPhotos.photos.length} results:`
               : "Search for a photo to begin"}
           </h2>
-          <CardContent>
-            <GridList
-              cellHeight={300}
+
+          {SearchPhotos && (
+            <ImageList
+              // cellHeight={300}
               spacing={30}
-              className={classes.gridList}
+              className={classes.titleBar}
             >
-              <GridListTile key="Subheader" cols={4} style={{ height: "auto" }}>
+              {/* <ImageListItem  key="Subheader" cols={4} style={{ height: "auto" }}>
                 <ListSubheader component="div"></ListSubheader>
-              </GridListTile>
-              {SearchPhotos.photos.map((photo) => (
-                <GridListTile key={photo.title}>
-                  <img src={photo.url} alt={photo.title} />
-                  <GridListTileBar
+              </ImageListItem > */}
+              {SearchPhotos?.photos?.map((photo) => (
+                <ImageListItem key={photo._id}>
+                  <img src={photo.url} alt={photo.title} loading="lazy" />
+                  <ImageListItemBar
                     title={`${photo.title} by ${photo.user.name}`}
                     actionIcon={
                       <IconButton
@@ -108,12 +112,12 @@ const SearchPhotos = () => {
                       </IconButton>
                     }
                   />
-                </GridListTile>
+                </ImageListItem>
               ))}
-            </GridList>
-          </CardContent>
+            </ImageList>
+          )}
         </Container>
-      </>
+      </div>
     );
 };
 
