@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Avatar,
   Box,
@@ -10,16 +10,17 @@ import {
   Link,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
 
-import { useMutation } from '@apollo/client';
-import { LOGIN } from '../utils/mutations';
-import Auth from '../utils/auth';
-
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../utils/mutations";
+import Auth from "../utils/auth";
 
 export default function SignIn() {
   const [login, { error }] = useMutation(LOGIN);
 
+  const [feedback, setFeedback] = useState();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,10 +38,9 @@ export default function SignIn() {
       const token = mutationResponse.data.login.token;
       Auth.login(token);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
+      setFeedback({ severity: "error", message: e.message });
     }
-
-
   };
 
   return (
@@ -61,6 +61,9 @@ export default function SignIn() {
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        {feedback && (
+        <Alert severity={feedback.severity}>{feedback.message}</Alert>
+      )}
           <TextField
             margin="normal"
             required

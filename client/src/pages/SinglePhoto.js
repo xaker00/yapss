@@ -19,11 +19,22 @@ import { BrowserRouter as Router, Switch, Route, useParams } from "react-router-
 import React, { useEffect } from "react";
 import { CardBody } from "../components/CardBody";
 
+import ReactTagInput from "@pathofdev/react-tag-input";
+
 export const SinglePhoto = (props) => {
     const {id} = useParams();
     return (
         <div>
-            <CardBody photoId={id}>
+            <CardBody>
+                <CardDetails />
+                <CardImage />
+                // TODO: use actual tags
+                <ReactTagInput readOnly={true} tags={['tag1', 'tag2']}/>
+                <CardActions>
+                    <RatingSystem />
+                    <AverageRating />
+                </CardActions>
+                <Comments />
             </CardBody>
         </div>
     );
