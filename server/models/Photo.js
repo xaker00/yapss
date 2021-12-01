@@ -13,11 +13,7 @@ const PhotoSchema = new Schema(
       required: true,
       unique: true,
     },
-    hashtags: [
-      {
-        tag: String,
-      },
-    ],
+    hashtags: [String],
     likes: { type: Number, default: 0 },
     url: {
       type: String,

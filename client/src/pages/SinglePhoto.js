@@ -14,11 +14,12 @@ import React from "react";
 import { CardBody } from "../components/CardBody";
 import { CardDetails } from "../components/CardDetails";
 import { CardImage } from "../components/CardImage";
-import { Hashtags } from "../components/Hashtags";
 import { RatingSystem } from "../components/RatingSystem";
 import { Comments } from "../components/Comments";
 import { AverageRating } from "../components/AverageRating";
 import CardActions from '@mui/material/CardActions';
+
+import ReactTagInput from "@pathofdev/react-tag-input";
 
 export const SinglePhoto = (props) => {
     return (
@@ -26,7 +27,8 @@ export const SinglePhoto = (props) => {
             <CardBody>
                 <CardDetails />
                 <CardImage />
-                <Hashtags />
+                // TODO: use actual tags
+                <ReactTagInput readOnly={true} tags={['tag1', 'tag2']}/>
                 <CardActions>
                     <RatingSystem />
                     <AverageRating />

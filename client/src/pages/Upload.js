@@ -4,8 +4,10 @@ import { Paper, TextField, Box, Button } from "@mui/material";
 
 import { ADD_PHOTO } from "../utils/mutations";
 
-import { Hashtags } from "./../components/Hashtags";
+import ReactTagInput from "@pathofdev/react-tag-input";
+
 import "./upload.css";
+import "@pathofdev/react-tag-input/build/index.css";
 
 // docs
 // https://www.apollographql.com/blog/graphql/file-uploads/with-react-hooks-typescript-amazon-s3-tutorial/
@@ -22,18 +24,15 @@ export const Upload = (props) => {
   // expose graphql as a function
   const [savePhoto, { error }] = useMutation(ADD_PHOTO);
 
-  // Handle file upload changes
-  const onFileChangeHandlerOld = (event) => {
-    const file = event.target.files[0].file;
-    console.log(event.target);
-    setFormData({ ...formData, file });
+  const onTagChangeHandler = (newTags) => {
+    setFormData({ ...formData, hashtags: [...newTags] });
   };
 
-    // Handle file upload changes
-    const onFileChangeHandler = (file) => {
-      console.log(file);
-      setFormData({ ...formData, file });
-    };
+  // Handle file upload changes
+  const onFileChangeHandler = (file) => {
+    console.log(file);
+    setFormData({ ...formData, file });
+  };
 
   // handle text input changes
   const onInputChangeHandler = (event) => {
@@ -74,7 +73,11 @@ export const Upload = (props) => {
             value={formData.description}
           />
           <Box sx={{ m: 2 }}>
-            <Hashtags />
+            <ReactTagInput
+              tags={formData.hashtags}
+              onChange={(newTags) => onTagChangeHandler(newTags)}
+              placeholder={'[Tags] Type and press enter'}
+            />
           </Box>
         </Box>
       </div>
