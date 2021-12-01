@@ -47,7 +47,7 @@ const typeDefs = gql`
     users: [User]
     photos: [Photo]
     comments: [Comment]
-    photo(photoId: ID!): Photo
+    photo(photoId: String): Photo
   }
 
   type Mutation {
