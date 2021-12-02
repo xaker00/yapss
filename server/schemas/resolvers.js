@@ -24,6 +24,7 @@ const resolvers = {
         return User.findOne({ _id: context.user._id })
           .populate("comments")
           .populate("photos")
+          .populate({path: "photos", populate:{path: "comments", populate:{path:'user'}}})
           .populate("user")
           .populate({
             path: "comments",
