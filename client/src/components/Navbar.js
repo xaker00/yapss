@@ -11,7 +11,7 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import MenuIcon from "@material-ui/icons/Menu";
+import MenuIcon from '@mui/icons-material/Menu';
 
 import Auth from "../utils/auth";
 

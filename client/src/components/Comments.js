@@ -1,7 +1,7 @@
 import React from 'react';
 // import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
