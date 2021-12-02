@@ -5,18 +5,27 @@ import {
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
+  from,
 } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, useParams } from "react-router-dom";
 import { Login } from "./pages/Login";
+import { createUser } from "./pages/createUser";
 import { Profile } from "./pages/Profile";
 import { SearchPhotos } from "./pages/SearchPhotos";
 import { Upload } from "./pages/Upload";
+import { SinglePhoto } from "./pages/SinglePhoto";
 
-import {Navbar} from "./components/Navbar"
+import { Copyright } from "./components/Copyright";
+import { Navbar } from "./components/Navbar";
 
-const httpLink = createHttpLink({
+// const httpLink = createHttpLink({
+//   uri: "/graphql",
+// });
+
+const uploadLink = createUploadLink({
   uri: "/graphql",
 });
 
@@ -33,7 +42,8 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  // TODO: do we still need the httpLink?
+  link: from([authLink, uploadLink]),
   cache: new InMemoryCache(),
 });
 
@@ -46,10 +56,16 @@ function App() {
           <Switch>
             <Route exact path="/" component={SearchPhotos} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/createUser" component={createUser} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/upload" component={Upload} />
+            {/* <Route exact path="/singlephoto" component={SinglePhoto} /> */}
+            <Route path="/singlephoto/:id">
+              <SinglePhoto />
+            </Route>
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Switch>
+          <Copyright />
         </>
       </Router>
     </ApolloProvider>

@@ -1,5 +1,6 @@
 import React from "react";
+import ShowAllPhotos from "../components/ShowAllPhotos";
 
 export const SearchPhotos = (props) => {
-  return <div>SearchPhotos</div>;
+  return <ShowAllPhotos></ShowAllPhotos>;
 };
